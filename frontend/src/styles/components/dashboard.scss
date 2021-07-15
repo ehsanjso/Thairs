@@ -1,0 +1,36 @@
+.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 60px;
+    color: #393e46;
+  }
+}
+
+.dashboard-inner {
+  width: 700px;
+
+  .answers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    img {
+      width: 150px;
+      height: 210px;
+      border-radius: 10px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+      cursor: pointer;
+      transition: 0.2s all ease;
+
+      &:hover {
+        margin-top: -20px;
+        box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+      }
+    }
+  }
+}
