@@ -5,9 +5,12 @@
   height: 100vh;
 
   h1 {
-    font-size: 20px;
-    margin-bottom: 60px;
+    font-size: 37px;
+    // margin-bottom: 60px;
+    margin-bottom: 0;
     color: #393e46;
+    font-weight: 400;
+    text-align: center;
   }
 }
 
@@ -16,8 +19,9 @@
 
   .answers {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
 
     img {
       width: 150px;
@@ -30,6 +34,27 @@
       &:hover {
         margin-top: -20px;
         box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+      }
+    }
+
+    .answer {
+      letter-spacing: 1px;
+      margin: 0;
+      width: 125px;
+      margin: 0 10px;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      color: #334257;
+      font-size: 37px;
+      line-height: 37px;
+      text-align: center;
+      font-weight: 300;
+
+      &:hover {
+        box-shadow: rgba(255, 46, 99, 0.2) 0px 0px 0px 1px;
+        color: rgb(255, 46, 99);
       }
     }
   }

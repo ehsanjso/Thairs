@@ -1,7 +1,5 @@
-import sklearn
 import numpy as np
 import pandas as pd
-import csv
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
@@ -16,17 +14,20 @@ import pickle
 
 from flask import Flask
 from flask import jsonify
+from flask_cors import CORS, cross_origin
 
-import webbrowser
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.route('/')
 def hello_world():
    return 'Hello World'
 
-@app.route('/requestRoot')
+@app.route('/requestRoot', methods=['GET'])
+@cross_origin()
 def request_root():
     return jsonify(
         node=0,

@@ -12,17 +12,17 @@ export default function TaglineQuestion() {
         and publishing industries for previewing layouts and visual mockups.
       </h1>
       <div className="answers">
-        <h1 class="heading heading--stroke heading--shadow">
+        <h1 className="heading heading--stroke heading--shadow">
           Roll the dice and unleash the excitement!
         </h1>
-        <h1 class="heading heading--stroke heading--shadow">
+        <h1 className="heading heading--stroke heading--shadow">
           Still Yelling. Still Fighting. Still Ready for Love.
         </h1>
-        <h1 class="heading heading--stroke heading--shadow">
+        <h1 className="heading heading--stroke heading--shadow">
           Friends are the people who let you be yourself... and never let you
           forget it.
         </h1>
-        <h1 class="heading heading--stroke heading--shadow">
+        <h1 className="heading heading--stroke heading--shadow">
           A Los Angeles Crime Saga
         </h1>
       </div>
