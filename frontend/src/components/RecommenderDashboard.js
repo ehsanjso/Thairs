@@ -19,7 +19,7 @@ import MovieCard from "./MovieCard";
 
 export default function RecommenderDashboard() {
   const [visible, setVisible] = useState(false);
-  const { question, getQuestion, movie } = useQuestion();
+  const { question, getQuestion, movie, qNum } = useQuestion();
   //   const movie = {
   //     id: "tt0110057",
   //     title: "Hoop Dreams",
@@ -667,11 +667,12 @@ export default function RecommenderDashboard() {
   const onClose = () => {
     setVisible(false);
   };
+
   return (
     <div className="dashboard">
       <Logo />
       <Progress
-        percent={question ? (question.isLeaf ? 100 : question.node * 100) : 0}
+        percent={movie ? 100 : qNum * 5}
         showInfo={false}
         strokeLinecap="square"
         strokeColor="#ff2e63"

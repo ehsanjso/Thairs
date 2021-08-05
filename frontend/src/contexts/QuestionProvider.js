@@ -13,6 +13,7 @@ export function useQuestion() {
 export function QuestionProvider({ children, user }) {
   const [question, setQuestion] = useState(undefined);
   const [movie, setMovie] = useState(undefined);
+  const [qNum, setQNum] = useState(0);
   //   const [initiated, setInitiated] = useState(false);
 
   useEffect(() => {
@@ -20,6 +21,7 @@ export function QuestionProvider({ children, user }) {
       //   dispatch(changeFetchInProg(true));
       const res = await axios.get(`${host}/requestRoot`);
       setQuestion(res.data);
+      setQNum(qNum + 1);
       //   dispatch(changeFetchInProg(false));
       //   setInitiated(true);
     }
@@ -41,13 +43,14 @@ export function QuestionProvider({ children, user }) {
         setMovie(movie.data);
       } else {
         setQuestion(res.data);
+        setQNum(qNum + 1);
       }
     }
     getData();
   };
 
   return (
-    <QuestionContext.Provider value={{ question, getQuestion, movie }}>
+    <QuestionContext.Provider value={{ question, getQuestion, movie, qNum }}>
       {children}
     </QuestionContext.Provider>
   );
