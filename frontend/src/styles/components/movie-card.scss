@@ -20,7 +20,7 @@ $card-hover-offset-y: 60px;
 // %clearfix
 
 .card-movie-wrapper {
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
   height: $card-height;
   position: relative;
   width: $card-width;
@@ -238,6 +238,15 @@ $card-hover-offset-y: 60px;
   &__description {
     font-size: 14px;
     max-width: 390px;
+    p {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      // Addition lines for 2 line or multiline ellipsis
+      display: -webkit-box !important;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      white-space: normal;
+    }
   }
   // &__description
 
