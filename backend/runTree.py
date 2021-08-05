@@ -67,7 +67,7 @@ def request_right(node):
 def request_movie(cluster):
     tmdb = links[links['movieId'] == clusterRecs.iloc[int(cluster)]['top1']]
     return jsonify(
-        tmdbId=tmdb['tmdbId'].item(),
+        tmdbId=int(tmdb['tmdbId'].item()),
         imdbId=tmdb['imdbId'].item(),
         url='https://www.themoviedb.org/movie/' + str(int(tmdb['tmdbId'].item())),
         )
