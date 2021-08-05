@@ -66,7 +66,11 @@ def request_right(node):
 @app.route('/requestMovie/<cluster>')
 def request_movie(cluster):
     tmdb = links[links['movieId'] == clusterRecs.iloc[int(cluster)]['top1']]
-    return 'https://www.themoviedb.org/movie/' + str(int(tmdb['tmdbId'].item()))
+    return jsonify(
+        tmdbId=tmdb['tmdbId'].item(),
+        imdbId=tmdb['imdbId'].item(),
+        url='https://www.themoviedb.org/movie/' + str(int(tmdb['tmdbId'].item())),
+        )
 
 if __name__ == '__main__':
     with open('model.pkl', 'rb') as f:
