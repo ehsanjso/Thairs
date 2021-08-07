@@ -36,31 +36,45 @@ def request_root():
 @app.route('/requestLeft/<node>')
 def request_left(node):
     childsNode = int(tree_.children_left[int(node)])
+
+    probList = tree_.value[childsNode][0].tolist()
+    prob = max(probList) / sum(probList)
+
     if tree_.feature[childsNode] != _tree.TREE_UNDEFINED:
         return jsonify(
             node=int(childsNode),
+            cluster=next((i for i, x in enumerate(tree_.value[childsNode].flatten().tolist()) if x)),
             feature=feature_name[childsNode],
+            probability=prob,
             isLeaf=False,
         )
     return jsonify(
             node=int(childsNode),
             cluster=next((i for i, x in enumerate(tree_.value[childsNode].flatten().tolist()) if x)),
             isLeaf=True,
+            probability=prob,
         )
 
 @app.route('/requestRight/<node>')
 def request_right(node):
     childsNode = int(tree_.children_right[int(node)])
+
+    probList = tree_.value[childsNode][0].tolist()
+    prob = max(probList) / sum(probList)
+
     if tree_.feature[childsNode] != _tree.TREE_UNDEFINED:
         return jsonify(
             node=int(childsNode),
+            cluster=next((i for i, x in enumerate(tree_.value[childsNode].flatten().tolist()) if x)),
             feature=feature_name[childsNode],
+            probability=prob,
             isLeaf=False,
         )
     return jsonify(
             node=int(childsNode),
             cluster=next((i for i, x in enumerate(tree_.value[childsNode].flatten().tolist()) if x)),
             isLeaf=True,
+            probability=prob,
         )
 
 @app.route('/requestMovie/<cluster>')
@@ -70,6 +84,12 @@ def request_movie(cluster):
         tmdbId=int(tmdb['tmdbId'].item()),
         imdbId=tmdb['imdbId'].item(),
         url='https://www.themoviedb.org/movie/' + str(int(tmdb['tmdbId'].item())),
+        )
+
+@app.route('/requestProb/<node>')
+def request_prob(node):
+    return jsonify(
+        probability=probs[int(node)],
         )
 
 if __name__ == '__main__':
@@ -88,4 +108,8 @@ if __name__ == '__main__':
         for i in tree_.feature
     ]
 
+    samples = tree_.n_node_samples
+    class1_positives = tree_.value[:,0,1]
+    probs = (class1_positives/samples).tolist()
+    print(probs)
     app.run()
