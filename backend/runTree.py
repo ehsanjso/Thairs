@@ -19,12 +19,26 @@ from flask import jsonify
 
 import webbrowser
 
+import json
+
 app = Flask(__name__)
 
+class Node:
+    def __init__(self, id, leftChild, rightChild, feature):
+        self.id = id
+        self.leftChild = leftChild
+        self.rightChild = rightChild
+        self.feature = feature
 
-@app.route('/')
-def hello_world():
-   return 'Hello World'
+
+
+    def serialize(self):
+        return {
+            'id': int(self.id), 
+            'leftChild': int(self.leftChild),
+            'rightChild': int(self.rightChild),
+            'feature': str(self.feature),
+        }
 
 @app.route('/requestRoot')
 def request_root():
@@ -86,11 +100,46 @@ def request_movie(cluster):
         url='https://www.themoviedb.org/movie/' + str(int(tmdb['tmdbId'].item())),
         )
 
-@app.route('/requestProb/<node>')
-def request_prob(node):
-    return jsonify(
-        probability=probs[int(node)],
+@app.route('/requestTree')
+def request_tree():
+    return jsonify(tree=[e.serialize() for e in treeNodes])
+
+@app.route('/requestNode/<node>')
+def request_node(node):
+    node = int(node)
+
+    probList = tree_.value[node][0].tolist()
+    prob = max(probList) / sum(probList)
+
+    if tree_.feature[node] != _tree.TREE_UNDEFINED:
+        return jsonify(
+            node=int(node),
+            cluster=next((i for i, x in enumerate(tree_.value[node].flatten().tolist()) if x)),
+            feature=feature_name[node],
+            probability=prob,
+            isLeaf=False,
         )
+    return jsonify(
+            node=int(node),
+            cluster=next((i for i, x in enumerate(tree_.value[node].flatten().tolist()) if x)),
+            isLeaf=True,
+            probability=prob,
+        )
+
+def treeToJson(tree_, feature_name):
+    treeNodes = []
+
+    def recurse(node, depth):
+        if tree_.feature[node] != _tree.TREE_UNDEFINED:
+            name = feature_name[node]
+            threshold = tree_.threshold[node]
+            treeNodes.append(Node(node, tree_.children_left[node], tree_.children_right[node], name))
+            recurse(tree_.children_left[node], depth + 1)
+            recurse(tree_.children_right[node], depth + 1)
+        else:
+            treeNodes.append(Node(node, -1, -1, -1))
+    recurse(0, 1)
+    return treeNodes
 
 if __name__ == '__main__':
     with open('model.pkl', 'rb') as f:
@@ -108,8 +157,6 @@ if __name__ == '__main__':
         for i in tree_.feature
     ]
 
-    samples = tree_.n_node_samples
-    class1_positives = tree_.value[:,0,1]
-    probs = (class1_positives/samples).tolist()
-    print(probs)
+    treeNodes = treeToJson(tree_, feature_name)
+
     app.run()
