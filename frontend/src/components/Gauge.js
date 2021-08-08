@@ -13,9 +13,11 @@ const chartSettings = {
   margin: 20,
 };
 
-export default function Gauge() {
+export default function Gauge({ data }) {
   const dms = chartSettings;
   const refSvg = useRef();
+
+  const f = d3.format(".0%");
 
   useEffect(() => {
     if (dms.boundedWidth !== 0 && dms.boundedHeight !== 0) {
@@ -181,7 +183,7 @@ export default function Gauge() {
         .append("g")
         .attr("class", "needle")
         .selectAll("path")
-        .data([needlePercent])
+        .data([data])
         .enter()
         .append("path")
         .attr("d", (d) =>
@@ -211,15 +213,15 @@ export default function Gauge() {
         .attr("fill", "#334257")
         .attr("stroke", "#334257")
         .style("font-size", "2.5em")
-        .datum(needlePercent)
-        .text((d) => `${d * 100}%`);
+        .datum(data)
+        .text((d) => d3.format(".0%")(d));
     }
     return () => {
       const svg = d3.select(refSvg.current);
       svg.selectAll("*").remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data]);
 
   return (
     <div className="gauge">

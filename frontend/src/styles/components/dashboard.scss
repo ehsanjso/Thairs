@@ -146,7 +146,7 @@
   z-index: 1;
 
   &.active {
-    left: 500px;
+    left: 600px;
     animation: antdDrawerFadeIn 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
     background: #faf9ff;
   }

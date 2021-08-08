@@ -668,6 +668,12 @@ export default function RecommenderDashboard() {
     setVisible(false);
   };
 
+  const confidence = question
+    ? question.probability
+      ? question.probability
+      : 0
+    : 0;
+
   return (
     <div className="dashboard">
       <Logo />
@@ -685,8 +691,8 @@ export default function RecommenderDashboard() {
       {/* <TrailerQuestion /> */}
       {/* <TaglineQuestion /> */}
       {/* <WordCloudQuestions /> */}
-      {/* <Gauge /> */}
-      {/* <div
+      <Gauge data={confidence} />
+      <div
         className={`note-btn ${visible ? "active" : ""}`}
         onClick={toggleDrawer}
       >
@@ -694,16 +700,16 @@ export default function RecommenderDashboard() {
         <RadarChartOutlined />
       </div>
       <Drawer
-        title="XAI"
+        title=""
         placement="left"
         closable={false}
         onClose={onClose}
         visible={visible}
         mask={false}
-        width={500}
+        width={600}
       >
         <XAI />
-      </Drawer> */}
+      </Drawer>
     </div>
   );
 }

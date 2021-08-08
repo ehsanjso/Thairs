@@ -19,7 +19,7 @@ export default function MovieCard({ data }) {
 
             <ul className="card-movie__details-item card-movie__details-list">
               {data.genreList.map((el) => (
-                <li>{el.value}</li>
+                <li key={el.value}>{el.value}</li>
               ))}
             </ul>
           </div>
