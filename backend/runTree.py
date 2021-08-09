@@ -94,7 +94,10 @@ def request_right(node):
 
 @app.route('/requestMovie/<cluster>')
 def request_movie(cluster):
-    tmdb = links[links['movieId'] == clusterRecs.iloc[int(cluster)]['top1']]
+    clusterRec = oddsRatio[oddsRatio['cluster'] == int(cluster)].sort_values(by=['odds_ratio'], ascending=False)
+    movieRec = clusterRec.iloc[[0]]['movieId']
+
+    tmdb = links[links['movieId'] == int(movieRec)]
     return jsonify(
         tmdbId=int(tmdb['tmdbId'].item()),
         imdbId=tmdb['imdbId'].item(),
@@ -149,7 +152,9 @@ if __name__ == '__main__':
     feature_names = pd.read_csv('data/x.csv', index_col=0).columns.tolist()
 
     # find movie suggestion
-    clusterRecs = pd.read_csv('data/clusterRec.csv', index_col=0)
+    oddsRatio = pd.read_csv('data/oddsRatio.csv', index_col=0)
+    oddsRatio = oddsRatio.dropna()
+
     links = pd.read_csv('data/links.csv')
 
     tree_ = clf.tree_
