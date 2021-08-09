@@ -52,9 +52,16 @@
       text-align: center;
       font-weight: 300;
 
+      &.yes {
+        &:hover {
+          box-shadow: rgba(#2a72c9, 0.2) 0px 0px 0px 1px;
+          color: #2a72c9;
+        }
+      }
+
       &:hover {
-        box-shadow: rgba(255, 46, 99, 0.2) 0px 0px 0px 1px;
-        color: rgb(255, 46, 99);
+        box-shadow: rgba(#c92a2a, 0.2) 0px 0px 0px 1px;
+        color: #c92a2a;
       }
     }
   }

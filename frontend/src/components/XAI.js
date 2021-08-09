@@ -11,66 +11,61 @@ const chartSettings = {
   marginLeft: 276,
 };
 
-export default function XAI() {
+export default function XAI({ treeArray, answers }) {
   const [ref, dms] = useChartDimensions(chartSettings);
   const refSvg = useRef();
 
   useEffect(() => {
-    if (dms.boundedWidth !== 0 && dms.boundedHeight !== 0) {
+    if (dms.boundedWidth !== 0 && dms.boundedHeight !== 0 && treeArray) {
       // 1. Access data
-      let dataset = [];
+      const formattedTree = (treeRoot, id, level, direction) => {
+        treeRoot = {
+          ...treeArray[id],
+          direction: answers.includes(id) ? direction : undefined,
+          pruned: false,
+        };
 
-      // 3. Draw canvas
-      var width = 600;
-      var selectStates = {
-        Florida: "none",
-        Pennsylvania: "none",
-        Ohio: "none",
-        Georgia: "none",
-        "North Carolina": "none",
-        Arizona: "none",
-        Wisconsin: "none",
-        Iowa: "none",
-        Nevada: "none",
-        "New Hampshire": "none",
-        "Maine-2": "none",
-        "Nebraska-2": "none",
+        if (level > 7) {
+          return treeRoot;
+        }
+
+        if (treeRoot.leftChild !== -1 || treeRoot.rightChild !== -1) {
+          treeRoot.children = [{}, {}];
+        }
+
+        if (treeRoot.leftChild !== -1) {
+          treeRoot.children[0] = formattedTree(
+            treeRoot.children[0],
+            treeRoot.leftChild,
+            level + 1,
+            "left"
+          );
+        }
+        if (treeRoot.rightChild !== -1) {
+          treeRoot.children[1] = formattedTree(
+            treeRoot.children[1],
+            treeRoot.rightChild,
+            level + 1,
+            "right"
+          );
+        }
+        return treeRoot;
       };
-      var candidateR = "Trump";
-      var candidateD = "Biden";
-      var stateLabel = (d) => (width > 800 ? d.name : d.shortname);
+      // 3. Draw canvas
+
+      var stateLabel = (d) => d.feature;
       var fullOpacity = 1.0;
       var normalOpacity = 0.3;
       var prunedOpacity = 0.05;
-      var colorR = "#c92a2a";
-      var colorD = "#2a72c9";
+      var colorNo = "#c92a2a";
+      var colorYes = "#2a72c9";
       var radius = 250;
-      var targetWidth = Math.min(width, radius * 2);
-      var partyColor = (d) =>
-        d.party === "D" ? colorD : d.party === "R" ? colorR : "#888";
-      var winner = (d) => {
-        const outcome = result(d);
-        return !outcome || outcome === "tie" ? null : outcome;
-      };
-      var contested = data
-        .filter((d) => d.category === "none")
-        .sort((a, b) => d3.descending(a.votes, b.votes));
-      var result = (d) =>
-        d.votesD > 269
-          ? "D"
-          : d.votesR > 269
-          ? "R"
-          : d.votesD === 269 && d.votesR === 269
-          ? "tie"
-          : null;
-      var votesScale = d3
-        .scaleLinear()
-        .domain([0, 538])
-        .range([0, targetWidth]);
-      var circleSize = d3
-        .scaleSqrt()
-        .domain(d3.extent(contested.map((d) => d.votes)))
-        .range([2.5, 6.5]);
+      var childColor = (d) =>
+        d.direction === "left"
+          ? colorYes
+          : d.direction === "right"
+          ? colorNo
+          : "#888";
       var strokeOpacity = (pruned, highlight) =>
         pruned ? prunedOpacity : highlight ? fullOpacity : normalOpacity;
       var tree = d3
@@ -78,74 +73,13 @@ export default function XAI() {
         .size([2 * Math.PI, radius])
         .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth);
 
-      function autoBox() {
-        document.body.appendChild(this);
-        const { x, y, width, height } = this.getBBox();
-        document.body.removeChild(this);
-        return [x - 5, y, width + 10, height];
-      }
-
-      var decided = new Map(
-        Object.entries(selectStates).filter(([key, value]) => value !== "none")
-      );
-
-      var totalR = d3.sum(
-        data.filter((d) => d.category === "R").map((d) => d.votes)
-      );
-
-      var totalD = d3.sum(
-        data.filter((d) => d.category === "D").map((d) => d.votes)
-      );
-
-      var treeData = (() => {
-        const root = {
-          name: "",
-          votes: 0,
-          votesD: totalD,
-          votesR: totalR,
-          pruned: false,
-        };
-        function buildTree(node, depth) {
-          if (depth < contested.length && !winner(node)) {
-            const state = contested[depth];
-            node.children = [
-              {
-                name: state.name,
-                shortname: state.shortname,
-                party: "D",
-                votes: state.votes,
-                votesD: node.votesD + state.votes,
-                votesR: node.votesR,
-                pruned:
-                  node.pruned ||
-                  (decided.has(state.name) && decided.get(state.name) === "R"),
-              },
-              {
-                name: state.name,
-                shortname: state.shortname,
-                party: "R",
-                votes: state.votes,
-                votesD: node.votesD,
-                votesR: node.votesR + state.votes,
-                pruned:
-                  node.pruned ||
-                  (decided.has(state.name) && decided.get(state.name) === "D"),
-              },
-            ];
-            node.children.forEach((child) => buildTree(child, depth + 1));
-          }
-          return node;
-        }
-        return buildTree(root, 0);
-      })();
-
-      const root = tree(d3.hierarchy(treeData));
+      const root = tree(d3.hierarchy(formattedTree({}, 0, 0)));
       const linkWidth = d3.scaleLinear().domain([root.height, 0]).range([1, 7]);
 
       const wrapper = d3
         .select(refSvg.current)
-        .attr("font-size", 14)
-        .attr("font-family", "var(--sans-serif)");
+        .attr("font-size", 12)
+        .attr("font-family", "Roboto");
 
       const element = wrapper.node();
       element.value = [];
@@ -184,7 +118,7 @@ export default function XAI() {
         .attr("stroke-opacity", (d) =>
           strokeOpacity(d.target.data.pruned, false)
         )
-        .attr("stroke", (d) => partyColor(d.target.data));
+        .attr("stroke", (d) => childColor(d.target.data));
 
       links
         .clone(true)
@@ -208,21 +142,19 @@ export default function XAI() {
 
       const circles = circlesGroup
         .append("circle")
-        .attr("stroke", (d) => partyColor(d.data))
-        .attr("stroke-opacity", (d) =>
-          strokeOpacity(d.data.pruned, winner(d.data))
-        )
+        .attr("stroke", (d) => childColor(d.data))
+        .attr("stroke-opacity", (d) => strokeOpacity(d.data.pruned, 0.2))
         .attr("stroke-width", 1.5)
-        .attr("fill", (d) => (winner(d.data) ? partyColor(d.data) : "white"))
+        .attr("fill", (d, i) => (i === 0 ? "white" : childColor(d.data)))
         .attr("fill-opacity", (d) => (d.data.pruned && !d.children ? 0.1 : 1))
-        .attr("r", (d) => (d.data.votes ? circleSize(d.data.votes) : 16));
+        .attr("r", (d, i) => (i === 0 ? 16 : 3));
 
       circles
         .clone(true)
         .lower()
         .attr("stroke-opacity", 0)
         .attr("fill-opacity", 0)
-        .attr("r", (d) => (d.data.votes ? circleSize(d.data.votes) * 2 : 0));
+        .attr("r", (d, i) => (i === 0 ? 16 : 3));
 
       const labelGroup = g
         .append("g")
@@ -245,17 +177,15 @@ export default function XAI() {
           !d.children ? `${Math.cos(d.x) * -0.4 + 0.31}em` : "0.31em"
         )
         .attr("dx", (d) => {
-          const dx = circleSize(d.data.votes) + 4;
+          const dx = 4;
           return !d.children ? 0 : d.x < Math.PI === !d.children ? dx : -dx;
         })
         .attr("text-anchor", (d) =>
           d.x < Math.PI === !d.children ? "start" : "end"
         )
-        .attr("fill", (d) => partyColor(d.data))
-        .attr("font-weight", (d) => (winner(d.data) ? "bold" : "normal"))
-        .text((d) =>
-          winner(d.data) ? stateLabel(d.data) + " ✓" : stateLabel(d.data)
-        );
+        .attr("fill", (d) => childColor(d.data))
+        .attr("font-weight", (d) => "400")
+        .text((d, i) => (i === 0 ? "" : stateLabel(d.data)));
 
       labels
         .clone(true)
@@ -281,10 +211,7 @@ export default function XAI() {
           )
         );
         circles.attr("stroke-opacity", (node) =>
-          strokeOpacity(
-            node.data.pruned,
-            sequence.indexOf(node.data) >= 0 || winner(node.data)
-          )
+          strokeOpacity(node.data.pruned, sequence.indexOf(node.data) >= 0)
         );
         labelGroup.attr("visibility", (node) =>
           sequence.indexOf(node.data) >= 0 ? null : "hidden"
@@ -307,7 +234,14 @@ export default function XAI() {
       const svg = d3.select(refSvg.current);
       svg.selectAll("*").remove();
     };
-  }, [dms.boundedHeight, dms.boundedWidth, dms.marginLeft, dms.marginTop]);
+  }, [
+    dms.boundedHeight,
+    dms.boundedWidth,
+    dms.marginLeft,
+    dms.marginTop,
+    treeArray,
+    answers,
+  ]);
 
   return (
     <div className="xai" ref={ref}>

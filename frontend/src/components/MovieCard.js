@@ -2,7 +2,6 @@ import React from "react";
 import "../styles/components/movie-card.scss";
 
 export default function MovieCard({ data }) {
-  console.log(data);
   return (
     <div className="card-movie-wrapper card-movie-wrapper--centered">
       <div className="card-movie card-movie--light card-movie--looper card-movie--active">
