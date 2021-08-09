@@ -104,6 +104,25 @@ def request_movie(cluster):
         url='https://www.themoviedb.org/movie/' + str(int(tmdb['tmdbId'].item())),
         )
 
+@app.route('/requestMovie/<cluster>/<position>')
+def request_movie_position(cluster, position):
+    clusterRec = oddsRatio[oddsRatio['cluster'] == int(cluster)].sort_values(by=['odds_ratio'], ascending=False)
+    clusterRec = clusterRec[clusterRec['odds_ratio'] > 1]
+    numMovies = len(clusterRec.index)
+    position = int(position)
+    if position < numMovies:
+        movieRec = clusterRec.iloc[[position]]['movieId']
+    else:
+        return "Out of Recommendations"
+
+    tmdb = links[links['movieId'] == int(movieRec)]
+    return jsonify(
+        tmdbId=int(tmdb['tmdbId'].item()),
+        imdbId=tmdb['imdbId'].item(),
+        url='https://www.themoviedb.org/movie/' + str(int(tmdb['tmdbId'].item())),
+        numMovies=numMovies,
+        )
+
 @app.route('/requestTree')
 def request_tree():
     return jsonify(tree=[e.serialize() for e in treeNodes])
@@ -129,6 +148,7 @@ def request_node(node):
             isLeaf=True,
             probability=prob,
         )
+
 
 def treeToJson(tree_, feature_name):
     treeNodes = []
