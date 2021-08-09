@@ -17,7 +17,7 @@ from sklearn.metrics import accuracy_score
 
 import pickle
 
-origCluster = pd.read_csv('data/clusterData.csv', index_col=0)
+origCluster = pd.read_csv('data/clusterDataNorm.csv', index_col=0)
 
 # removiedNoise = origCluster.groupby('cluster').mean()
 # removiedNoise = removiedNoise.applymap(lambda x: 1 if x > 2.5 else 0)
@@ -31,7 +31,7 @@ removiedNoise = removiedNoise[removiedNoise.cluster != -1]
 x = removiedNoise.loc[:, removiedNoise.columns != 'cluster']
 x.to_csv('data/x.csv')
 # x = ave.loc[:, ave.columns != 'index']
-x = x.applymap(lambda x: 1 if x > 2.5 else 0)
+x = x.applymap(lambda x: 1 if x >= 0.90 else 0)
 
 y = pd.DataFrame(removiedNoise['cluster'])
 
