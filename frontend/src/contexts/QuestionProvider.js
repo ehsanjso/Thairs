@@ -38,20 +38,17 @@ export function QuestionProvider({ children, user }) {
           `${host}/requestMovie/${res.data.cluster}`
         );
         const movie = await axios.get(
-          `//imdb-api.com/en/API/Title/k_6pfirb1l/tt${String(
-            result.data.imdbId
-          ).padStart(7, 0)}`
+          `//api.themoviedb.org/3/movie/${result.data.tmdbId}?api_key=b810a93cc9b9a1cb3b2a0011362ee850`
         );
         setMovie(movie.data);
-      } else {
-        if (res.data.node) {
-          let newArr = [...answers];
-          newArr.push(res.data.node);
-          setAnswers(newArr);
-        }
-        setQuestion(res.data);
-        setQNum(qNum + 1);
       }
+      if (res.data.node) {
+        let newArr = [...answers];
+        newArr.push(res.data.node);
+        setAnswers(newArr);
+      }
+      setQuestion(res.data);
+      setQNum(qNum + 1);
     }
     getData();
   };

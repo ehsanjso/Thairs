@@ -5,30 +5,34 @@ export default function MovieCard({ data }) {
   return (
     <div className="card-movie-wrapper card-movie-wrapper--centered">
       <div className="card-movie card-movie--light card-movie--looper card-movie--active">
-        <img src={data.image} alt={data.title} className="card-movie__img" />
+        <img
+          src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`}
+          alt={data.title}
+          className="card-movie__img"
+        />
         <div className="card-movie__content">
           <div className="card-movie__title">{data.title}</div>
 
           <div className="card-movie__details">
-            <span className="card-movie__details-item">{data.year}</span>
+            {/* <span className="card-movie__details-item">{data.year}</span> */}
 
             <span className="card-movie__details-item">
-              {data.runtimeMins} mins
+              {data.runtime} mins
             </span>
 
             <ul className="card-movie__details-item card-movie__details-list">
-              {data.genreList.map((el) => (
-                <li key={el.value}>{el.value}</li>
+              {data.genres.map((el) => (
+                <li key={el.name}>{el.name}</li>
               ))}
             </ul>
           </div>
 
           <div className="card-movie__description">
-            <p>{data.plot}</p>
+            <p>{data.overview}</p>
           </div>
         </div>
 
-        <div className="card-movie__rating">{data.imDbRating}</div>
+        <div className="card-movie__rating">{parseInt(data.popularity)}</div>
       </div>
 
       {/* <div className="card-movie card-movie--light card-movie--interstellar">
