@@ -61,9 +61,9 @@ export default function XAI({ treeArray, answers }) {
       var colorYes = "#2a72c9";
       var radius = 250;
       var childColor = (d) =>
-        d.direction === "left"
+        d.direction === "right"
           ? colorYes
-          : d.direction === "right"
+          : d.direction === "left"
           ? colorNo
           : "#888";
       var strokeOpacity = (pruned, highlight) =>
