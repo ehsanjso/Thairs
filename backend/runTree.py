@@ -193,6 +193,49 @@ def request_movie_by_genre(genre, amount):
 
     return jsonify(my_dict)
     return "y"
+@app.route('/requestMovieByNotGenre/<genre>/<amount>')
+def request_movie_by_not_genre(genre, amount):
+    genre = str(genre).lower()
+    amount = int(amount)
+    
+    movieG = movieData
+    movieG['genres'] = movieG['genres'].apply(lambda x: x.lower())
+    movieG = movieG[~(movieG['genres'].str.contains(genre))]
+
+    numMovies = len(movieG['genres'])
+
+    print(numMovies)
+    movieG = movieG.sort_values(by='vote_average', ascending=False)
+
+    top10Range = int(round(numMovies / 5))
+    
+    if amount > top10Range:
+        top10Range = numMovies - 1
+
+    if amount > top10Range:
+        return "Not enough movies for this genre"
+
+    indexes = random.sample(range(0, top10Range), amount)
+
+    tmdbIds = []
+
+    for i in indexes:
+        row = movieG.iloc[[i]]
+        movieId = row.iloc[0]['imdb_id']
+        movieId = int(movieId[2:])
+        tmdb = links.loc[links['imdbId'] == movieId]
+        tmdbIds.append(tmdb.iloc[0]['tmdbId'])
+
+    my_dict = dict() 
+    for index,value in enumerate(tmdbIds):
+        my_dict[index] = int(value)
+    # print(my_dict)
+    # print(indexes)
+    # return indexes
+
+
+    return jsonify(my_dict)
+    return "y"
 
 def treeToJson(tree_, feature_name):
     treeNodes = []
