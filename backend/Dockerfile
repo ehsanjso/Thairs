@@ -13,4 +13,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . /app
 
-CMD [ "python", "runTree.py" ]
+ENTRYPOINT [ "python3" ]
+
+CMD [ "runTree.py" ]
