@@ -16,6 +16,7 @@ import pickle
 
 from flask import Flask
 from flask import jsonify
+from flask import request
 
 import webbrowser
 
@@ -192,6 +193,7 @@ def request_movie_by_genre(genre, amount):
 
     return jsonify(my_dict)
     return "y"
+
 @app.route('/requestMovieByNotGenre/<genre>/<amount>')
 def request_movie_by_not_genre(genre, amount):
     genre = str(genre).lower()
@@ -235,6 +237,17 @@ def request_movie_by_not_genre(genre, amount):
 
     return jsonify(my_dict)
     return "y"
+
+@app.route('/sendClusterData', methods=['POST'])
+def send_cluster_data():
+    content = request.json
+    cluster = content['cluster']
+    isSatisfied = content['isSatisfied']
+
+    file_object = open('data/clusterFeedback.txt', 'a')
+    file_object.write(str(cluster) + "," + str(isSatisfied) + "\n")
+    file_object.close()
+    return ('', 204)
 
 def treeToJson(tree_, feature_name):
     treeNodes = []
