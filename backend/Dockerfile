@@ -1,18 +1,16 @@
 FROM ubuntu:18.04
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev && \
-    pip install --upgrade pip
+RUN apt-get update
+RUN apt-get install -y python3 python3-dev python3-pip nginx
+RUN pip3 install uwsgi
 
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
 
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "python" ]
-
-CMD [ "runTree.py" ]
+CMD [ "python", "runTree.py" ]
