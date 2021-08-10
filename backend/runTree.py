@@ -274,4 +274,4 @@ if __name__ == '__main__':
 
     movieData = pd.read_csv('data/movieData.csv', index_col=0)
 
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
