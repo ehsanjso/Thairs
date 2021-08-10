@@ -13,7 +13,7 @@ services:
     depends_on:
       - grecom_backend
   grecom_backend:
-    container_name: coux_backend
+    container_name: grecom_backend
     restart: always
     build:
       context: backend
