@@ -34,13 +34,7 @@ export function QuestionProvider({ children, user }) {
     async function getData() {
       const res = await axios.get(`${host}/request${direction}/${data.node}`);
       if (res.data.isLeaf) {
-        const result = await axios.get(
-          `${host}/requestMovie/${res.data.cluster}`
-        );
-        const movie = await axios.get(
-          `//api.themoviedb.org/3/movie/${result.data.tmdbId}?api_key=b810a93cc9b9a1cb3b2a0011362ee850`
-        );
-        setMovie(movie.data);
+        getMovie(res.data.cluster);
       }
       if (res.data.node) {
         let newArr = [...answers];
@@ -53,9 +47,17 @@ export function QuestionProvider({ children, user }) {
     getData();
   };
 
+  const getMovie = async (cluster) => {
+    const result = await axios.get(`${host}/requestMovie/${cluster}`);
+    const movie = await axios.get(
+      `//api.themoviedb.org/3/movie/${result.data.tmdbId}?api_key=b810a93cc9b9a1cb3b2a0011362ee850`
+    );
+    setMovie(movie.data);
+  };
+
   return (
     <QuestionContext.Provider
-      value={{ question, getQuestion, movie, qNum, tree, answers }}
+      value={{ question, getQuestion, movie, qNum, tree, answers, getMovie }}
     >
       {children}
     </QuestionContext.Provider>

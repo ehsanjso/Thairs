@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { ResizeObserver } from "@juggle/resize-observer";
 import * as d3 from "d3";
+import { Button } from "antd";
+import { CoffeeOutlined } from "@ant-design/icons";
 import "../styles/components/gauge.scss";
 
 const chartSettings = {
@@ -13,7 +15,7 @@ const chartSettings = {
   margin: 20,
 };
 
-export default function Gauge({ data }) {
+export default function Gauge({ data, getMovie, cluster, hasMovie }) {
   const dms = chartSettings;
   const refSvg = useRef();
 
@@ -43,8 +45,7 @@ export default function Gauge({ data }) {
         needle_color: "#BB345B",
       };
 
-      var needlePercent = 0.6,
-        center = {},
+      var center = {},
         radii = {},
         angles = {},
         ticks = {},
@@ -231,6 +232,16 @@ export default function Gauge({ data }) {
         ref={refSvg}
       ></svg>
       <h1>Confidence</h1>
+      {!hasMovie && (
+        <Button
+          type="primary"
+          icon={<CoffeeOutlined />}
+          className="recommend-btn"
+          onClick={() => getMovie(cluster)}
+        >
+          Lets Goooo!
+        </Button>
+      )}
     </div>
   );
 }

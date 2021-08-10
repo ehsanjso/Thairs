@@ -5,21 +5,19 @@ import {
   CaretLeftOutlined,
   CaretRightOutlined,
 } from "@ant-design/icons";
-import PosterQuestion from "./PosterQuestion";
-import TaglineQuestion from "./TaglineQuestion";
-import TrailerQuestion from "./TrailerQuestion";
-import WordCloudQuestions from "./WordCloudQuestions";
 import Question from "./Question";
 import Logo from "./Logo";
 import XAI from "./XAI";
 import Gauge from "./Gauge";
+import GaugeFlat from "./GaugeFlat";
 import { useQuestion } from "../contexts/QuestionProvider";
 import "../styles/components/dashboard.scss";
 import MovieCard from "./MovieCard";
 
 export default function RecommenderDashboard() {
   const [visible, setVisible] = useState(false);
-  const { question, getQuestion, movie, qNum, tree, answers } = useQuestion();
+  const { question, getQuestion, movie, tree, answers, getMovie } =
+    useQuestion();
 
   const toggleDrawer = () => {
     setVisible((prevState) => !prevState);
@@ -37,12 +35,12 @@ export default function RecommenderDashboard() {
   return (
     <div className="dashboard">
       <Logo />
-      <Progress
+      {/* <Progress
         percent={movie ? 100 : qNum * 5}
         showInfo={false}
         strokeLinecap="square"
         strokeColor="#ff2e63"
-      />
+      /> */}
       {question && !movie && (
         <Question data={question} getQuestion={getQuestion} />
       )}
@@ -51,7 +49,18 @@ export default function RecommenderDashboard() {
       {/* <TrailerQuestion /> */}
       {/* <TaglineQuestion /> */}
       {/* <WordCloudQuestions /> */}
-      <Gauge data={confidence} />
+      {/* <Gauge
+        data={confidence}
+        getMovie={getMovie}
+        cluster={question ? question.cluster : undefined}
+        hasMovie={!!movie}
+      /> */}
+      <GaugeFlat
+        data={confidence}
+        getMovie={getMovie}
+        cluster={question ? question.cluster : undefined}
+        hasMovie={!!movie}
+      />
       <div
         className={`note-btn ${visible ? "active" : ""}`}
         onClick={toggleDrawer}
