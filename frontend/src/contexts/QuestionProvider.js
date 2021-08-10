@@ -16,6 +16,7 @@ export function QuestionProvider({ children, user }) {
   const [movie, setMovie] = useState(undefined);
   const [qNum, setQNum] = useState(0);
   const [tree, setTree] = useState([]);
+  const [movieNum, setMovieNum] = useState(0);
   //   const [initiated, setInitiated] = useState(false);
 
   useEffect(() => {
@@ -47,12 +48,15 @@ export function QuestionProvider({ children, user }) {
     getData();
   };
 
-  const getMovie = async (cluster) => {
-    const result = await axios.get(`${host}/requestMovie/${cluster}`);
+  const getMovie = async () => {
+    const result = await axios.get(
+      `${host}/requestMovie/${question.cluster}/${movieNum}`
+    );
     const movie = await axios.get(
       `//api.themoviedb.org/3/movie/${result.data.tmdbId}?api_key=b810a93cc9b9a1cb3b2a0011362ee850`
     );
     setMovie(movie.data);
+    setMovieNum(movieNum + 1);
   };
 
   return (

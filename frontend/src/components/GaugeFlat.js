@@ -101,7 +101,7 @@ export default function Gauge({ data, getMovie, cluster, hasMovie }) {
       canvas.style.imageRendering = "pixelated";
       const rectSize = dms.boundedWidth / n;
       for (let i = 0; i < n; i++) {
-        context.fillStyle = d3.interpolateRdBu(i / (n - 1));
+        context.fillStyle = d3.interpolateSpectral(i / (n - 1));
         context.fillRect(i * rectSize, 0, rectSize, 30);
       }
     }

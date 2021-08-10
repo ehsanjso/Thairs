@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/components/movie-card.scss";
 
-export default function MovieCard({ data }) {
+export default function MovieCard({ data, getMovie }) {
   return (
     <div className="card-movie-wrapper card-movie-wrapper--centered">
       <div className="card-movie card-movie--light card-movie--looper card-movie--active">
@@ -32,8 +32,16 @@ export default function MovieCard({ data }) {
           </div>
         </div>
 
-        <div className="card-movie__rating">{parseInt(data.popularity)}</div>
+        <div className="card-movie__rating">{parseInt(data.popularity)}%</div>
       </div>
+      <a className="link" href="#" onClick={getMovie}>
+        <span className="link__arrow">
+          <span></span>
+          <span></span>
+        </span>
+        <span className="link__line"></span>
+        <span className="link__text">Next Movie</span>
+      </a>
 
       {/* <div className="card-movie card-movie--light card-movie--interstellar">
           <div className="card-movie__content">

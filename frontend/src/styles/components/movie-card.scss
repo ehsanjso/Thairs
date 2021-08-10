@@ -20,7 +20,6 @@ $card-hover-offset-y: 60px;
 // %clearfix
 
 .card-movie-wrapper {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
   height: $card-height;
   position: relative;
   width: $card-width;
@@ -34,6 +33,11 @@ $card-hover-offset-y: 60px;
     // .card-movie-carousel
   }
   // &:hover
+
+  .next-btn {
+    position: absolute;
+    bottom: -50px;
+  }
 }
 // .card-movie-wrapper
 
@@ -42,8 +46,6 @@ $card-hover-offset-y: 60px;
   left: 50%;
   position: absolute;
   top: 50%;
-  border-radius: 10px;
-  overflow: hidden;
 }
 // .card-movie-wrapper--centered
 
@@ -164,12 +166,14 @@ $card-hover-offset-y: 60px;
   background-size: cover;
   bottom: 0;
   height: 100%;
-  overflow: hidden;
   position: absolute;
   right: 0;
   opacity: 0;
   width: 100%;
   z-index: 20;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
 
   &__img {
     height: $card-height;
@@ -358,3 +362,119 @@ $card-hover-offset-y: 60px;
   //   background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/43525/cloud-atlas.png");
 }
 // .card-movie--cloud-atlas
+
+.link {
+  $self: &;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px;
+  text-decoration: none;
+  transform: rotate(-90deg) translate3d(-300px, 0, 0);
+  position: absolute;
+  right: -220px;
+  top: -80px;
+
+  &__arrow {
+    display: inline-flex;
+
+    span {
+      position: relative;
+      width: 14px;
+      height: 2px;
+      border-radius: 2px;
+      overflow: hidden;
+      background: #bebdbe;
+      z-index: 2;
+
+      &:nth-child(1) {
+        transform-origin: left bottom;
+        transform: rotate(45deg) translate3d(8px, -10px, 0);
+      }
+
+      &:nth-child(2) {
+        transform-origin: left bottom;
+        transform: rotate(-45deg);
+      }
+
+      &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #c3002f;
+      }
+    }
+  }
+
+  &__line {
+    position: relative;
+    margin-left: -14px;
+    margin-right: 30px;
+    width: 150px;
+    height: 2px;
+    background: #bebdbe;
+    overflow: hidden;
+    z-index: 1;
+
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 80px;
+      width: 70px;
+      height: 2px;
+      background: #c3002f;
+    }
+  }
+
+  &__text {
+    color: #4a4a4a;
+    font-family: "Oswald", sans-serif;
+    font-size: 25px;
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    #{$self} {
+      &__line {
+        &:after {
+          animation: animation-line 0.5s forwards;
+        }
+      }
+
+      &__arrow {
+        span {
+          &:after {
+            animation: animation-arrow 0.5s forwards;
+            animation-delay: 0.2s;
+          }
+        }
+      }
+      &__text {
+        color: #c3002f;
+      }
+    }
+  }
+}
+
+@keyframes animation-line {
+  0% {
+    left: 80px;
+  }
+
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes animation-arrow {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 100%;
+  }
+}

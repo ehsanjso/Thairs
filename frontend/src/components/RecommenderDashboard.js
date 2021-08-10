@@ -44,7 +44,7 @@ export default function RecommenderDashboard() {
       {question && !movie && (
         <Question data={question} getQuestion={getQuestion} />
       )}
-      {movie && <MovieCard data={movie} />}
+      {movie && <MovieCard data={movie} getMovie={getMovie} />}
       {/* <PosterQuestion /> */}
       {/* <TrailerQuestion /> */}
       {/* <TaglineQuestion /> */}
