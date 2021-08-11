@@ -42,10 +42,10 @@ $card-hover-offset-y: 60px;
 // .card-movie-wrapper
 
 .card-movie-wrapper--centered {
-  transform: translate(-50%, -50%);
-  left: 50%;
-  position: absolute;
-  top: 50%;
+  // transform: translate(-50%, -50%);
+  // left: 50%;
+  // position: absolute;
+  // top: 50%;
 }
 // .card-movie-wrapper--centered
 
@@ -255,19 +255,24 @@ $card-hover-offset-y: 60px;
   // &__description
 
   &__rating {
-    $size: 50px;
+    $size: 30px;
     bottom: $size/3;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 400;
     line-height: $size;
     position: absolute;
     right: $size/3;
     text-align: center;
-    width: $size;
+    width: auto;
+    padding: 0 10px;
+
+    span {
+      font-weight: 700;
+    }
 
     &:after {
-      border-radius: 100%;
-      border: 2px solid #ee927b;
+      border-radius: 10px;
+      border: 1px solid #ee927b;
       content: "";
       height: 100%;
       left: 0;
@@ -373,6 +378,13 @@ $card-hover-offset-y: 60px;
   position: absolute;
   right: -220px;
   top: -80px;
+
+  &.reverse {
+    transform: rotate(90deg) translate3d(300px, 0, 0);
+    left: -245px;
+    top: -110px;
+    right: auto;
+  }
 
   &__arrow {
     display: inline-flex;

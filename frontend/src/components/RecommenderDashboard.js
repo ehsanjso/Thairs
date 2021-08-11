@@ -16,7 +16,7 @@ import MovieCard from "./MovieCard";
 
 export default function RecommenderDashboard() {
   const [visible, setVisible] = useState(false);
-  const { question, getQuestion, movie, tree, answers, getMovie } =
+  const { question, getQuestion, movie, tree, answers, getMovie, movieNum } =
     useQuestion();
 
   const toggleDrawer = () => {
@@ -44,7 +44,9 @@ export default function RecommenderDashboard() {
       {question && !movie && (
         <Question data={question} getQuestion={getQuestion} />
       )}
-      {movie && <MovieCard data={movie} getMovie={getMovie} />}
+      {movie && (
+        <MovieCard data={movie} getMovie={getMovie} movieNum={movieNum} />
+      )}
       {/* <PosterQuestion /> */}
       {/* <TrailerQuestion /> */}
       {/* <TaglineQuestion /> */}

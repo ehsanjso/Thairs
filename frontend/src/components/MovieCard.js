@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/components/movie-card.scss";
 
-export default function MovieCard({ data, getMovie }) {
+export default function MovieCard({ data, getMovie, movieNum }) {
   return (
     <div className="card-movie-wrapper card-movie-wrapper--centered">
       <div className="card-movie card-movie--light card-movie--looper card-movie--active">
@@ -32,15 +32,25 @@ export default function MovieCard({ data, getMovie }) {
           </div>
         </div>
 
-        <div className="card-movie__rating">{parseInt(data.popularity)}%</div>
+        <div className="card-movie__rating">
+          Ranking: <span>{movieNum + 1}</span>
+        </div>
       </div>
-      <a className="link" href="#" onClick={getMovie}>
+      <a className="link" href="#" onClick={() => getMovie("next")}>
         <span className="link__arrow">
           <span></span>
           <span></span>
         </span>
         <span className="link__line"></span>
         <span className="link__text">Next Movie</span>
+      </a>
+      <a className="link reverse" href="#" onClick={() => getMovie("previous")}>
+        <span className="link__arrow">
+          <span></span>
+          <span></span>
+        </span>
+        <span className="link__line"></span>
+        <span className="link__text">Previous Movie</span>
       </a>
 
       {/* <div className="card-movie card-movie--light card-movie--interstellar">

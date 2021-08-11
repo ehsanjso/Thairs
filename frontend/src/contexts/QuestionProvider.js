@@ -16,7 +16,7 @@ export function QuestionProvider({ children, user }) {
   const [movie, setMovie] = useState(undefined);
   const [qNum, setQNum] = useState(0);
   const [tree, setTree] = useState([]);
-  const [movieNum, setMovieNum] = useState(0);
+  const [movieNum, setMovieNum] = useState(undefined);
   //   const [initiated, setInitiated] = useState(false);
 
   useEffect(() => {
@@ -34,34 +34,58 @@ export function QuestionProvider({ children, user }) {
   const getQuestion = (data, direction) => {
     async function getData() {
       const res = await axios.get(`${host}/request${direction}/${data.node}`);
+      setQuestion(res.data);
+      setQNum(qNum + 1);
       if (res.data.isLeaf) {
-        getMovie(res.data.cluster);
+        getMovie(undefined, true);
       }
       if (res.data.node) {
         let newArr = [...answers];
         newArr.push(res.data.node);
         setAnswers(newArr);
       }
-      setQuestion(res.data);
-      setQNum(qNum + 1);
     }
     getData();
   };
 
-  const getMovie = async () => {
-    const result = await axios.get(
-      `${host}/requestMovie/${question.cluster}/${movieNum}`
-    );
-    const movie = await axios.get(
-      `//api.themoviedb.org/3/movie/${result.data.tmdbId}?api_key=b810a93cc9b9a1cb3b2a0011362ee850`
-    );
-    setMovie(movie.data);
-    setMovieNum(movieNum + 1);
+  const getMovie = (direction = "next", firstCall = false) => {
+    if (firstCall) {
+      setMovieNum(0);
+    } else {
+      const newVal = direction === "next" ? movieNum + 1 : movieNum - 1;
+      const val = newVal < 0 ? 0 : newVal;
+      setMovieNum(val);
+    }
   };
+
+  useEffect(() => {
+    if (question) {
+      async function getData() {
+        const result = await axios.get(
+          `${host}/requestMovie/${question.cluster}/${movieNum}`
+        );
+        console.timeLog(result);
+        const movie = await axios.get(
+          `//api.themoviedb.org/3/movie/${result.data.tmdbId}?api_key=b810a93cc9b9a1cb3b2a0011362ee850`
+        );
+        setMovie(movie.data);
+      }
+      getData();
+    }
+  }, [movieNum]);
 
   return (
     <QuestionContext.Provider
-      value={{ question, getQuestion, movie, qNum, tree, answers, getMovie }}
+      value={{
+        question,
+        getQuestion,
+        movie,
+        qNum,
+        tree,
+        answers,
+        getMovie,
+        movieNum,
+      }}
     >
       {children}
     </QuestionContext.Provider>
