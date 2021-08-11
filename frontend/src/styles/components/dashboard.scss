@@ -158,3 +158,15 @@
     background: #faf9ff;
   }
 }
+
+.menu {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .recommend-btn {
+    margin: 0 5px;
+  }
+}

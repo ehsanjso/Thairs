@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import { ResizeObserver } from "@juggle/resize-observer";
 import * as d3 from "d3";
-import { Button } from "antd";
-import { CoffeeOutlined } from "@ant-design/icons";
 import "../styles/components/gauge.scss";
 
 const chartSettings = {
@@ -12,7 +10,7 @@ const chartSettings = {
   marginLeft: 0,
 };
 
-export default function Gauge({ data, getMovie, cluster, hasMovie }) {
+export default function Gauge({ data, getMovie, cluster }) {
   const [ref, dms] = useChartDimensions(chartSettings);
   const refSvg = useRef();
   const refCanvas = useRef();
@@ -122,16 +120,6 @@ export default function Gauge({ data, getMovie, cluster, hasMovie }) {
         ref={refCanvas}
       ></canvas>
       <h1>Confidence</h1>
-      {/* {!hasMovie && (
-        <Button
-          type="primary"
-          icon={<CoffeeOutlined />}
-          className="recommend-btn"
-          onClick={() => getMovie(cluster)}
-        >
-          Lets Goooo!
-        </Button>
-      )} */}
     </div>
   );
 }

@@ -20,16 +20,17 @@ export function QuestionProvider({ children, user }) {
   //   const [initiated, setInitiated] = useState(false);
 
   useEffect(() => {
-    async function getData() {
-      const res = await axios.get(`${host}/requestRoot`);
-      setQuestion(res.data);
-      setQNum(qNum + 1);
-
-      const result = await axios.get(`${host}/requestTree`);
-      setTree(result.data.tree);
-    }
-    getData();
+    init();
   }, []);
+
+  const init = async () => {
+    const res = await axios.get(`${host}/requestRoot`);
+    setQuestion(res.data);
+    setQNum(qNum + 1);
+
+    const result = await axios.get(`${host}/requestTree`);
+    setTree(result.data.tree);
+  };
 
   const getQuestion = (data, direction) => {
     async function getData() {
@@ -74,6 +75,16 @@ export function QuestionProvider({ children, user }) {
     }
   }, [movieNum]);
 
+  const clear = () => {
+    setQuestion(undefined);
+    setAnswers([]);
+    setMovie(undefined);
+    setQNum(0);
+    setTree([]);
+    setMovieNum(undefined);
+    init();
+  };
+
   return (
     <QuestionContext.Provider
       value={{
@@ -85,6 +96,7 @@ export function QuestionProvider({ children, user }) {
         answers,
         getMovie,
         movieNum,
+        clear,
       }}
     >
       {children}

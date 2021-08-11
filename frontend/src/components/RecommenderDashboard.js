@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Drawer, Progress } from "antd";
+import { Drawer, Button } from "antd";
 import {
   RadarChartOutlined,
   CaretLeftOutlined,
   CaretRightOutlined,
+  CoffeeOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
 import Question from "./Question";
 import Logo from "./Logo";
@@ -16,8 +18,16 @@ import MovieCard from "./MovieCard";
 
 export default function RecommenderDashboard() {
   const [visible, setVisible] = useState(false);
-  const { question, getQuestion, movie, tree, answers, getMovie, movieNum } =
-    useQuestion();
+  const {
+    question,
+    getQuestion,
+    movie,
+    tree,
+    answers,
+    getMovie,
+    movieNum,
+    clear,
+  } = useQuestion();
 
   const toggleDrawer = () => {
     setVisible((prevState) => !prevState);
@@ -31,6 +41,8 @@ export default function RecommenderDashboard() {
       ? question.probability
       : 0
     : 0;
+
+  const hasMovie = !!movie;
 
   return (
     <div className="dashboard">
@@ -81,6 +93,28 @@ export default function RecommenderDashboard() {
       >
         <XAI treeArray={tree} answers={answers} />
       </Drawer>
+
+      <div className="menu">
+        <Button
+          icon={<RedoOutlined />}
+          className="recommend-btn"
+          onClick={clear}
+          shape="round"
+        >
+          Redo
+        </Button>
+        {!hasMovie && (
+          <Button
+            type="primary"
+            icon={<CoffeeOutlined />}
+            className="recommend-btn"
+            onClick={() => getMovie(undefined, true)}
+            shape="round"
+          >
+            Recommend Now!
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

@@ -25,6 +25,8 @@ export default function MovieCard({ data, getMovie, movieNum }) {
                 <li key={el.name}>{el.name}</li>
               ))}
             </ul>
+
+            <span>Pupularity: {parseInt(data.popularity)}%</span>
           </div>
 
           <div className="card-movie__description">
