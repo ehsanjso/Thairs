@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as R from "ramda";
 import { Drawer, Button } from "antd";
 import {
   RadarChartOutlined,
@@ -10,7 +11,6 @@ import {
 import Question from "./Question";
 import Logo from "./Logo";
 import XAI from "./XAI";
-import Gauge from "./Gauge";
 import GaugeFlat from "./GaugeFlat";
 import { useQuestion } from "../contexts/QuestionProvider";
 import "../styles/components/dashboard.scss";
@@ -27,6 +27,8 @@ export default function RecommenderDashboard() {
     getMovie,
     movieNum,
     clear,
+    answerPosters,
+    qNum,
   } = useQuestion();
 
   const toggleDrawer = () => {
@@ -47,28 +49,17 @@ export default function RecommenderDashboard() {
   return (
     <div className="dashboard">
       <Logo />
-      {/* <Progress
-        percent={movie ? 100 : qNum * 5}
-        showInfo={false}
-        strokeLinecap="square"
-        strokeColor="#ff2e63"
-      /> */}
       {question && !movie && (
-        <Question data={question} getQuestion={getQuestion} />
+        <Question
+          data={question}
+          getQuestion={getQuestion}
+          answerPosters={answerPosters}
+          qNum={qNum}
+        />
       )}
       {movie && (
         <MovieCard data={movie} getMovie={getMovie} movieNum={movieNum} />
       )}
-      {/* <PosterQuestion /> */}
-      {/* <TrailerQuestion /> */}
-      {/* <TaglineQuestion /> */}
-      {/* <WordCloudQuestions /> */}
-      {/* <Gauge
-        data={confidence}
-        getMovie={getMovie}
-        cluster={question ? question.cluster : undefined}
-        hasMovie={!!movie}
-      /> */}
       <GaugeFlat
         data={confidence}
         getMovie={getMovie}
