@@ -249,6 +249,30 @@ def send_cluster_data():
     file_object.close()
     return ('', 204)
 
+@app.route('/requestGroupMovie/<position>', methods=['GET', 'POST'])
+def request_group_movie(position):
+    content = request.json
+    clusters = content['clusters']
+    for cluster in clusters:
+        clusterRec = oddsRatio[oddsRatio['cluster'] == int(cluster)].sort_values(by=['odds_ratio'], ascending=False)
+        clusterRec = clusterRec[clusterRec['odds_ratio'] > 1]
+
+    numMovies = len(clusterRec.index)
+    position = int(position)
+
+    if position < numMovies:
+        movieRec = clusterRec.iloc[[position]]['movieId']
+    else:
+        return "Out of Recommendations"
+
+    tmdb = links[links['movieId'] == int(movieRec)]
+    return jsonify(
+        tmdbId=int(tmdb['tmdbId'].item()),
+        imdbId=tmdb['imdbId'].item(),
+        url='https://www.themoviedb.org/movie/' + str(int(tmdb['tmdbId'].item())),
+        numMovies=numMovies,
+        )
+
 def treeToJson(tree_, feature_name):
     treeNodes = []
 
