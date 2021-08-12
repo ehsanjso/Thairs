@@ -31,11 +31,26 @@ module.exports = function (socket, io) {
   });
 
   socket.on("inc-answered-questions", async ({ userToken }) => {
-    console.log(userToken);
     if (userToken) {
       const user = await User.findByCredentials(userToken);
       user.question = user.question + 1;
       await user.save();
+      io.to(socketId).emit("group-created");
+    }
+  });
+
+  socket.on("update-cluster", async ({ userToken, cluster }) => {
+    if (userToken) {
+      const user = await User.findByCredentials(userToken);
+      user.cluster = cluster;
+      await user.save();
+
+      const users = await User.find({});
+      const res = users.filter((el) => el.groupToken === socketId);
+      const isLastRequest = res.every((el) => el.cluster !== -1);
+      if (isLastRequest) {
+        io.to(socketId).emit("get-movie", res);
+      }
       io.to(socketId).emit("group-created");
     }
   });

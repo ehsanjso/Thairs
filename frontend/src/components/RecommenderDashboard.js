@@ -62,7 +62,7 @@ export default function RecommenderDashboard() {
           qNum={qNum}
         />
       )}
-      {isGroupMode && isLeaf && <Wait />}
+      {isGroupMode && isLeaf && !movie && <Wait />}
       {movie && (
         <MovieCard data={movie} getMovie={getMovie} movieNum={movieNum} />
       )}

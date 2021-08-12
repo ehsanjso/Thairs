@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema(
     question: {
       type: Number,
     },
+    cluster: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

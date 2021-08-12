@@ -23,7 +23,8 @@ export function QuestionProvider({ children, user }) {
   const [tree, setTree] = useState([]);
   const [movieNum, setMovieNum] = useState(undefined);
   const [isLeaf, setIsLeaf] = useState(false);
-  const { incrementQuestionsAnswered, isGroupMode } = useGroup();
+  const { incrementQuestionsAnswered, isGroupMode, updateCluster, clusters } =
+    useGroup();
 
   useEffect(() => {
     init();
@@ -71,7 +72,8 @@ export function QuestionProvider({ children, user }) {
       if (res.data.isLeaf) {
         setIsLeaf(true);
         if (isGroupMode) {
-          console.log("leaf");
+          console.log("hi");
+          updateCluster(res.data.cluster);
         } else {
           getMovie(undefined, true);
         }
@@ -101,9 +103,19 @@ export function QuestionProvider({ children, user }) {
   useEffect(() => {
     if (question) {
       async function getData() {
-        const result = await axios.get(
-          `${host}/requestMovie/${question.cluster}/${movieNum}`
-        );
+        let result = undefined;
+        if (isGroupMode && clusters) {
+          const json = { clusters };
+          result = await axios.post(
+            `${host}/requestGroupMovie/${movieNum}`,
+            json
+          );
+        } else {
+          result = await axios.get(
+            `${host}/requestMovie/${question.cluster}/${movieNum}`
+          );
+        }
+
         const movie = await axios.get(
           `//api.themoviedb.org/3/movie/${result.data.tmdbId}?api_key=b810a93cc9b9a1cb3b2a0011362ee850`
         );
@@ -112,6 +124,12 @@ export function QuestionProvider({ children, user }) {
       getData();
     }
   }, [movieNum]);
+
+  useEffect(() => {
+    if (clusters) {
+      setMovieNum(0);
+    }
+  }, [clusters]);
 
   const clear = () => {
     setAnswerPosters([]);

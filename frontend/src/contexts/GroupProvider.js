@@ -15,6 +15,7 @@ export function GroupProvider({ children }) {
   const [isJoining, setIsJoining] = useState(false);
   const userToken = useSelector((state) => state.auth.token);
   const [group, setGroup] = useState([]);
+  const [clusters, setClusters] = useState(undefined);
   const isGroupMode = group.length > 1;
 
   useEffect(() => {
@@ -34,6 +35,7 @@ export function GroupProvider({ children }) {
     socket.on("receive-group-users", addUsers);
     socket.on("start-recom", startRecom);
     socket.on("group-created", getListOfUsers);
+    socket.on("get-movie", getGroupMovie);
 
     return () => socket.off("receive-comment");
   }, [socket]);
@@ -54,10 +56,21 @@ export function GroupProvider({ children }) {
     });
   };
 
+  const updateCluster = (cluster) => {
+    socket.emit("update-cluster", {
+      userToken,
+      cluster,
+    });
+  };
+
   const getListOfUsers = () => {
     socket.emit("get-list-users", {
       groupToken,
     });
+  };
+
+  const getGroupMovie = (users) => {
+    setClusters(users.map((el) => el.cluster));
   };
 
   const start = () => {
@@ -80,6 +93,8 @@ export function GroupProvider({ children }) {
         setIsJoining,
         incrementQuestionsAnswered,
         isGroupMode,
+        updateCluster,
+        clusters,
       }}
     >
       {children}
