@@ -1,12 +1,13 @@
 import React from "react";
 import "../styles/components/group-answer.scss";
 
-export default function GroupAnswer({ group, isLeaf, userToken }) {
+export default function GroupAnswer({ group, userToken }) {
   return (
     <div className="group-answer">
       {group.map((user, i) => {
         const qs = [...Array(user.question + 1).keys()];
         const isYou = user.token === userToken;
+        const isLeaf = user.cluster !== -1;
         return (
           <div className="user">
             <div className="q-answer">
@@ -15,7 +16,7 @@ export default function GroupAnswer({ group, isLeaf, userToken }) {
                 return (
                   <span
                     className={`q-answer-bubble ${currQ ? "active" : ""} ${
-                      isYou && currQ && isLeaf ? "leaf" : ""
+                      currQ && isLeaf ? "leaf" : ""
                     }`}
                   ></span>
                 );

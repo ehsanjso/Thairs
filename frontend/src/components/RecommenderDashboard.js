@@ -112,9 +112,7 @@ export default function RecommenderDashboard() {
           </Button>
         )}
       </div>
-      {isGroupMode && (
-        <GroupAnswer group={group} isLeaf={isLeaf} userToken={userToken} />
-      )}
+      {isGroupMode && <GroupAnswer group={group} userToken={userToken} />}
     </div>
   );
 }
