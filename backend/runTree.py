@@ -14,12 +14,8 @@ import pickle
 
 from flask import Flask
 from flask import jsonify
-<<<<<<< HEAD
 from flask_cors import CORS, cross_origin
-=======
 from flask import request
->>>>>>> 6eb857d (added cluster feedback endpoint)
-
 
 import json
 import random
