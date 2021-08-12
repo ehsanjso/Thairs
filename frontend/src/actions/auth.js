@@ -9,6 +9,11 @@ export const login = (user) => ({
   user,
 });
 
+export const addGroup = (groupToken) => ({
+  type: "ADD_GROUP",
+  groupToken,
+});
+
 export const logout = () => ({
   type: "LOGOUT",
 });

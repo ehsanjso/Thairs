@@ -2,5 +2,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
+}
+
+.group-view {
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+
+  .me {
+    color: #ff2e63;
+  }
+
+  .anticon {
+    margin: 0 10px;
+  }
+}
+
+.group-btn {
+  position: absolute;
+  bottom: 50px;
 }
