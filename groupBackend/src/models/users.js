@@ -8,6 +8,9 @@ const userSchema = new mongoose.Schema(
     groupToken: {
       type: String,
     },
+    question: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

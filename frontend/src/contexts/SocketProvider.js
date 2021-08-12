@@ -18,7 +18,6 @@ export function SocketProvider({ children, userToken }) {
   useEffect(() => {
     const newSocket = io(groupHost, { query: { groupToken } });
     setSocket(newSocket);
-    console.log("connected!");
     return () => newSocket.close();
   }, [groupToken]);
 

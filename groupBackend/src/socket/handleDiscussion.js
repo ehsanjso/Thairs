@@ -9,24 +9,34 @@ module.exports = function (socket, io) {
   console.log(`new connection id=${socketId}!`);
 
   socket.on("create-group", async ({ userToken }) => {
-    console.log("--------------");
-    console.log(userToken);
     if (userToken) {
       const user = await User.findByCredentials(userToken);
       user.groupToken = socketId;
+      user.question = 0;
       await user.save();
       io.to(socketId).emit("group-created");
     }
   });
 
   socket.on("get-list-users", async ({ groupToken }) => {
-    console.log("--------------");
-    console.log(groupToken);
     if (groupToken) {
       const users = await User.find({});
       const res = users.filter((el) => el.groupToken === groupToken);
-      console.log(users);
       io.to(socketId).emit("receive-group-users", res);
+    }
+  });
+
+  socket.on("start", async () => {
+    io.to(socketId).emit("start-recom");
+  });
+
+  socket.on("inc-answered-questions", async ({ userToken }) => {
+    console.log(userToken);
+    if (userToken) {
+      const user = await User.findByCredentials(userToken);
+      user.question = user.question + 1;
+      await user.save();
+      io.to(socketId).emit("group-created");
     }
   });
 

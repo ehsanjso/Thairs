@@ -13,8 +13,11 @@ import Logo from "./Logo";
 import XAI from "./XAI";
 import GaugeFlat from "./GaugeFlat";
 import { useQuestion } from "../contexts/QuestionProvider";
+import { useGroup } from "../contexts/GroupProvider";
 import "../styles/components/dashboard.scss";
 import MovieCard from "./MovieCard";
+import GroupAnswer from "./GroupAnswer";
+import Wait from "./Wait";
 
 export default function RecommenderDashboard() {
   const [visible, setVisible] = useState(false);
@@ -29,7 +32,9 @@ export default function RecommenderDashboard() {
     clear,
     answerPosters,
     qNum,
+    isLeaf,
   } = useQuestion();
+  const { isGroupMode, group, userToken } = useGroup();
 
   const toggleDrawer = () => {
     setVisible((prevState) => !prevState);
@@ -49,7 +54,7 @@ export default function RecommenderDashboard() {
   return (
     <div className="dashboard">
       <Logo />
-      {question && !movie && (
+      {question && !movie && !isLeaf && (
         <Question
           data={question}
           getQuestion={getQuestion}
@@ -57,6 +62,7 @@ export default function RecommenderDashboard() {
           qNum={qNum}
         />
       )}
+      {isGroupMode && isLeaf && <Wait />}
       {movie && (
         <MovieCard data={movie} getMovie={getMovie} movieNum={movieNum} />
       )}
@@ -94,7 +100,7 @@ export default function RecommenderDashboard() {
         >
           Redo
         </Button>
-        {!hasMovie && (
+        {!hasMovie && !isGroupMode && (
           <Button
             type="primary"
             icon={<CoffeeOutlined />}
@@ -106,6 +112,9 @@ export default function RecommenderDashboard() {
           </Button>
         )}
       </div>
+      {isGroupMode && (
+        <GroupAnswer group={group} isLeaf={isLeaf} userToken={userToken} />
+      )}
     </div>
   );
 }

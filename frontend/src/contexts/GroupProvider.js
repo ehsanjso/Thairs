@@ -15,6 +15,7 @@ export function GroupProvider({ children }) {
   const [isJoining, setIsJoining] = useState(false);
   const userToken = useSelector((state) => state.auth.token);
   const [group, setGroup] = useState([]);
+  const isGroupMode = group.length > 1;
 
   useEffect(() => {
     if (isGroupCreator) {
@@ -47,8 +48,8 @@ export function GroupProvider({ children }) {
     });
   };
 
-  const joinGroup = (userToken) => {
-    socket.emit("create-group", {
+  const incrementQuestionsAnswered = () => {
+    socket.emit("inc-answered-questions", {
       userToken,
     });
   };
@@ -77,6 +78,8 @@ export function GroupProvider({ children }) {
         groupToken,
         start,
         setIsJoining,
+        incrementQuestionsAnswered,
+        isGroupMode,
       }}
     >
       {children}

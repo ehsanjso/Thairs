@@ -10,6 +10,7 @@ router.post("/users", async (req, res) => {
   try {
     const token = jwt.sign({ _id: user._id.toString() }, "ehsanjsoishere");
     user.token = token;
+    user.question = 0;
     await user.save();
     res.status(201).send({ user, token: user.token });
   } catch (e) {

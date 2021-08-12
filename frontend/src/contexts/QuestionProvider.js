@@ -1,8 +1,11 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import * as R from "ramda";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { logout, startRegister } from "../actions/auth";
 import { host } from "../actions/consts/host";
-import { changeFetchInProg } from "../actions/fetchInProgress";
+import { useGroup } from "../contexts/GroupProvider";
+import { history } from "../routers/AppRouter";
 
 const QuestionContext = React.createContext();
 
@@ -11,6 +14,7 @@ export function useQuestion() {
 }
 
 export function QuestionProvider({ children, user }) {
+  const dispatch = useDispatch();
   const [question, setQuestion] = useState(undefined);
   const [answers, setAnswers] = useState([]);
   const [answerPosters, setAnswerPosters] = useState([]);
@@ -18,7 +22,8 @@ export function QuestionProvider({ children, user }) {
   const [qNum, setQNum] = useState(0);
   const [tree, setTree] = useState([]);
   const [movieNum, setMovieNum] = useState(undefined);
-  //   const [initiated, setInitiated] = useState(false);
+  const [isLeaf, setIsLeaf] = useState(false);
+  const { incrementQuestionsAnswered, isGroupMode } = useGroup();
 
   useEffect(() => {
     init();
@@ -64,12 +69,20 @@ export function QuestionProvider({ children, user }) {
       setQNum((prevState) => prevState + 1);
       getMoviePosters(res.data.feature);
       if (res.data.isLeaf) {
-        getMovie(undefined, true);
+        setIsLeaf(true);
+        if (isGroupMode) {
+          console.log("leaf");
+        } else {
+          getMovie(undefined, true);
+        }
       }
       if (res.data.node) {
         let newArr = [...answers];
         newArr.push(res.data.node);
         setAnswers(newArr);
+        if (isGroupMode && !isLeaf) {
+          incrementQuestionsAnswered();
+        }
       }
     }
     getData();
@@ -108,7 +121,15 @@ export function QuestionProvider({ children, user }) {
     setQNum(0);
     setTree([]);
     setMovieNum(undefined);
-    init();
+    setIsLeaf(false);
+    if (isGroupMode) {
+      localStorage.removeItem("grecom-user");
+      localStorage.removeItem("grecom-group");
+      history.push("/");
+    }
+
+    dispatch(logout());
+    dispatch(startRegister());
   };
 
   return (
@@ -124,6 +145,7 @@ export function QuestionProvider({ children, user }) {
         movieNum,
         clear,
         answerPosters,
+        isLeaf,
       }}
     >
       {children}
