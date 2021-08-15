@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/components/movie-card.scss";
+import Feedback from "./Feedback";
 
 export default function MovieCard({ data, getMovie, movieNum }) {
   return (
@@ -85,6 +86,8 @@ export default function MovieCard({ data, getMovie, movieNum }) {
 
           <div className="card-movie__player" data-trailer="3WzHXI5HizQ"></div>
         </div> */}
+
+      <Feedback />
     </div>
   );
 }

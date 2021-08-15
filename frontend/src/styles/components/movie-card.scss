@@ -243,13 +243,12 @@ $card-hover-offset-y: 60px;
     font-size: 14px;
     max-width: 390px;
     p {
-      // text-overflow: ellipsis;
-      // overflow: hidden;
-      // // Addition lines for 2 line or multiline ellipsis
-      // display: -webkit-box !important;
-      // -webkit-line-clamp: 3;
-      // -webkit-box-orient: vertical;
-      // white-space: normal;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      white-space: normal;
     }
   }
   // &__description

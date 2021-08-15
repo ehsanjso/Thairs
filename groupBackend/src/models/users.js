@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema(
     cluster: {
       type: Number,
     },
+    hasStar: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,

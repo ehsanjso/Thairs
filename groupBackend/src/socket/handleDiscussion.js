@@ -26,10 +26,6 @@ module.exports = function (socket, io) {
     }
   });
 
-  socket.on("start", async () => {
-    io.to(socketId).emit("start-recom");
-  });
-
   socket.on("inc-answered-questions", async ({ userToken }) => {
     if (userToken) {
       const user = await User.findByCredentials(userToken);
@@ -53,6 +49,21 @@ module.exports = function (socket, io) {
       }
       io.to(socketId).emit("group-created");
     }
+  });
+
+  socket.on("update-individual-cluster", async ({ userToken, cluster }) => {
+    if (userToken) {
+      const user = await User.findByCredentials(userToken);
+      user.cluster = cluster;
+      await user.save();
+    }
+  });
+
+  socket.on("update-movie-feedback", async ({ userToken, hasStar }) => {
+    const user = await User.findByCredentials(userToken);
+    user.hasStar = hasStar;
+    await user.save();
+    io.to(socketId).emit("update-user", user);
   });
 
   socket.on("start", async () => {

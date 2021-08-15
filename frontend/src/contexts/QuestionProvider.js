@@ -13,7 +13,7 @@ export function useQuestion() {
   return useContext(QuestionContext);
 }
 
-export function QuestionProvider({ children, user }) {
+export function QuestionProvider({ children }) {
   const dispatch = useDispatch();
   const [question, setQuestion] = useState(undefined);
   const [answers, setAnswers] = useState([]);
@@ -23,8 +23,13 @@ export function QuestionProvider({ children, user }) {
   const [tree, setTree] = useState([]);
   const [movieNum, setMovieNum] = useState(undefined);
   const [isLeaf, setIsLeaf] = useState(false);
-  const { incrementQuestionsAnswered, isGroupMode, updateCluster, clusters } =
-    useGroup();
+  const {
+    incrementQuestionsAnswered,
+    isGroupMode,
+    updateCluster,
+    clusters,
+    updateIndividualCluster,
+  } = useGroup();
 
   useEffect(() => {
     init();
@@ -72,9 +77,9 @@ export function QuestionProvider({ children, user }) {
       if (res.data.isLeaf) {
         setIsLeaf(true);
         if (isGroupMode) {
-          console.log("hi");
           updateCluster(res.data.cluster);
         } else {
+          updateIndividualCluster(res.data.cluster);
           getMovie(undefined, true);
         }
       }
@@ -130,6 +135,13 @@ export function QuestionProvider({ children, user }) {
       setMovieNum(0);
     }
   }, [clusters]);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", clear);
+    return () => {
+      window.removeEventListener("beforeunload", clear);
+    };
+  }, []);
 
   const clear = () => {
     setAnswerPosters([]);

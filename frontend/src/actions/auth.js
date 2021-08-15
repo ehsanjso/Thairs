@@ -14,6 +14,11 @@ export const addGroup = (groupToken) => ({
   groupToken,
 });
 
+export const updateFeedback = (hasStar) => ({
+  type: "UPDATE_FEEDBACK",
+  hasStar,
+});
+
 export const logout = () => ({
   type: "LOGOUT",
 });

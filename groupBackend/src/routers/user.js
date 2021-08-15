@@ -12,6 +12,7 @@ router.post("/users", async (req, res) => {
     user.token = token;
     user.question = 0;
     user.cluster = -1;
+    user.hasStar = false;
     await user.save();
     res.status(201).send({ user, token: user.token });
   } catch (e) {
