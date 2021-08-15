@@ -13,6 +13,7 @@ services:
       - grecom_group_backend
     depends_on:
       - grecom_backend
+      - grecom_group_backend
   grecom_backend:
     container_name: grecom_backend
     restart: always
