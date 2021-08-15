@@ -10,6 +10,7 @@ services:
       - "80:80"
     links:
       - grecom_backend
+      - grecom_group_backend
     depends_on:
       - grecom_backend
   grecom_backend:
@@ -20,5 +21,34 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:5000"
+    links:
+      - grecom_group_backend
+    depends_on:
+      - grecom_group_backend
     environment:
       - PORT=5000
+  grecom_group_backend:
+    container_name: grecom_group_backend
+    restart: always
+    build:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/assets:/app/assets
+    ports:
+      - "8081:8888"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URL=mongo:27017/grecom
+  mongo:
+    container_name: mongo
+    restart: always
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
