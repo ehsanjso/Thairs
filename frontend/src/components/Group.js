@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, message } from "antd";
 import { UserOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { history } from "../routers/AppRouter";
 import Logo from "./Logo";
 import { useGroup } from "../contexts/GroupProvider";
@@ -13,18 +14,16 @@ export default function Group() {
     <div className="group">
       <Logo />
       <p>
-        <Button
-          type="link"
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `localhost:3000/invitation?group=${groupToken}`
-            );
+        <CopyToClipboard
+          text={`http://165.227.39.61/invitation?group=${groupToken}`}
+          onCopy={() => {
             message.info("Copied!");
           }}
-          className="copy"
         >
-          Copy Group invitation link!
-        </Button>
+          <Button type="link" className="copy">
+            Copy Group invitation link!
+          </Button>
+        </CopyToClipboard>
       </p>
       <div className="group-view">
         {group.map((el) => {
