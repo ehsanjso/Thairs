@@ -5,9 +5,12 @@
   height: 100vh;
 
   h1 {
-    font-size: 20px;
-    margin-bottom: 60px;
+    font-size: 37px;
+    // margin-bottom: 60px;
+    margin-bottom: 0;
     color: #393e46;
+    font-weight: 400;
+    text-align: center;
   }
 }
 
@@ -16,20 +19,53 @@
 
   .answers {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
 
     img {
-      width: 150px;
-      height: 210px;
+      width: 90px;
       border-radius: 10px;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
       cursor: pointer;
       transition: 0.2s all ease;
+    }
+
+    .answer {
+      letter-spacing: 1px;
+      margin: 0;
+      // width: 125px;
+      margin: 0 10px;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      color: #334257;
+      font-size: 37px;
+      line-height: 37px;
+      text-align: center;
+      font-weight: 300;
+
+      &.yes {
+        &:hover {
+          box-shadow: rgba(#2a72c9, 0.2) 0px 0px 0px 1px;
+          color: #2a72c9;
+        }
+      }
 
       &:hover {
-        margin-top: -20px;
-        box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+        box-shadow: rgba(#c92a2a, 0.2) 0px 0px 0px 1px;
+        color: #c92a2a;
+      }
+
+      .answer-img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 15px 0;
+        img {
+          margin: 0 10px;
+        }
       }
     }
   }
@@ -99,5 +135,42 @@
       border-radius: 0 !important;
       height: 20px !important;
     }
+  }
+}
+
+.note-btn {
+  position: absolute;
+  left: 0;
+  padding: 10px;
+  background: #fff;
+  color: #6554c0;
+  width: 55px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  border-radius: 0 10px 10px 0;
+  transition: 0.3s all ease;
+  cursor: pointer;
+  box-shadow: 6px 2px 4px 0 rgba(0, 0, 0, 0.2);
+  z-index: 100;
+
+  &.active {
+    left: 600px;
+    animation: antdDrawerFadeIn 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
+    background: #faf9ff;
+  }
+}
+
+.menu {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .recommend-btn {
+    margin: 0 5px;
   }
 }

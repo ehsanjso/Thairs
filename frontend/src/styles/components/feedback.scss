@@ -1,0 +1,34 @@
+.feedback {
+  position: absolute;
+  bottom: -100px;
+  .ant-btn {
+    span {
+      font-size: 20px !important;
+    }
+  }
+}
+
+.feedback-star {
+  font-size: 20px;
+  color: rgba(149, 157, 165, 0.9);
+  text-align: left;
+  width: 100%;
+  padding: 0 15px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  .star-btn {
+    margin-left: 10px;
+    font-size: 25px;
+    cursor: pointer;
+    transition: 0.2s all ease;
+
+    &:hover {
+      color: #f0c929;
+    }
+
+    .star {
+      color: #f0c929;
+    }
+  }
+}

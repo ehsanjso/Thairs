@@ -3,5 +3,10 @@
 // export const host = run_vars.API_URL || "//www.com";
 export const host =
   !process.env.NODE_ENV || process.env.NODE_ENV === "development"
+    ? "//localhost:5000"
+    : "//165.227.39.61:8080";
+
+export const groupHost =
+  !process.env.NODE_ENV || process.env.NODE_ENV === "development"
     ? "//localhost:8888"
-    : "//localhost:8080";
+    : "//165.227.39.61:8081";

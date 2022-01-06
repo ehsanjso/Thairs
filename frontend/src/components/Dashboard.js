@@ -1,26 +1,32 @@
-import React from "react";
-import { Progress } from "antd";
-import PosterQuestion from "./PosterQuestion";
-import TaglineQuestion from "./TaglineQuestion";
-import TrailerQuestion from "./TrailerQuestion";
-import WordCloudQuestions from "./WordCloudQuestions";
-import "../styles/components/dashboard.scss";
-import Logo from "./Logo";
+import React, { useState } from "react";
+import { history } from "../routers/AppRouter";
+import { Router, Route, Switch } from "react-router";
+import { QuestionProvider } from "../contexts/QuestionProvider";
+import { useSelector } from "react-redux";
+import RecommenderDashboard from "./RecommenderDashboard";
+import { SocketProvider } from "../contexts/SocketProvider";
+import { GroupProvider } from "../contexts/GroupProvider";
+import Group from "../components/Group";
+import Lobby from "../components/Lobby";
 
 export default function Dashboard() {
+  const userToken = useSelector((state) => state.auth.token);
+
   return (
-    <div className="dashboard">
-      <Logo />
-      <Progress
-        percent={50}
-        showInfo={false}
-        strokeLinecap="square"
-        strokeColor="#ff2e63"
-      />
-      <PosterQuestion />
-      {/* <TrailerQuestion /> */}
-      {/* <TaglineQuestion /> */}
-      {/* <WordCloudQuestions /> */}
-    </div>
+    <SocketProvider userToken={userToken}>
+      <GroupProvider>
+        <QuestionProvider>
+          <Switch>
+            <Route
+              path="/recommender"
+              component={RecommenderDashboard}
+              exact={true}
+            />
+            <Route path="/group" component={Group} exact={true} />
+            <Route path="/" component={Lobby} exact={true} />
+          </Switch>
+        </QuestionProvider>
+      </GroupProvider>
+    </SocketProvider>
   );
 }
